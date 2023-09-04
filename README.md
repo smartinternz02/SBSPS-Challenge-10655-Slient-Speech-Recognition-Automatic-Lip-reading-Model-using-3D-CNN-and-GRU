@@ -127,6 +127,10 @@ Commit your changes: git commit -am 'Add awesome feature'
 Push to the branch: git push origin feature/awesome-feature
 Create a pull request.
 
+## Video Explanation
+
+https://drive.google.com/file/d/1WAuZzrQhkpA1tZ8xipQiyZqixkBF8S0S/view?usp=sharing
+
 ## License
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
