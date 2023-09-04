@@ -1,0 +1,536 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="stylesheet" href="../static/tailwind.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <title>Paecify</title>
+
+  <style>
+    #menu-toggle:checked+#menu {
+      display: block;
+    }
+
+    #dropdown-toggle:checked+#dropdown {
+      display: block;
+    }
+
+    a,
+    span {
+      position: relative;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    a.arrow,
+    span.arrow {
+      display: flex;
+      align-items: center;
+      font-weight: 600;
+      line-height: 1.5;
+    }
+
+    a.arrow .arrow_icon,
+    span.arrow .arrow_icon {
+      position: relative;
+      margin-left: 0.5em;
+    }
+
+    a.arrow .arrow_icon svg,
+    span.arrow .arrow_icon svg {
+      transition: transform 0.3s 0.02s ease;
+      margin-right: 1em;
+    }
+
+    a.arrow .arrow_icon::before,
+    span.arrow .arrow_icon::before {
+      content: "";
+      display: block;
+      position: absolute;
+      top: 50%;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: #38b2ac;
+      transform: translateY(-50%);
+      transition: width 0.3s ease;
+    }
+
+    a.arrow:hover .arrow_icon::before,
+    span.arrow:hover .arrow_icon::before {
+      width: 1em;
+    }
+
+    a.arrow:hover .arrow_icon svg,
+    span.arrow:hover .arrow_icon svg {
+      transform: translateX(0.75em);
+    }
+
+    /* .cover {
+      border-bottom-right-radius: 128px;
+    }  */
+
+    .bg-blue-teal-gradient {
+      background: rgb(49, 130, 206);
+      background: linear-gradient(90deg, rgba(49, 130, 206, 1) 0%, rgba(56, 178, 172, 1) 100%);
+    }
+    .overlay {
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(0, 0, 0, 0.7);
+      transition: opacity 500ms;
+      visibility: hidden;
+      opacity: 0;
+    }
+    .overlay:target {
+      visibility: visible;
+      opacity: 1;
+      z-index: 9999;
+    }
+    
+    .popup {
+      margin: 70px auto;
+      padding: 20px;
+      background: #fff;
+      border-radius: 5px;
+      z-index: 9999;
+      width: 65%;
+      position: relative;
+      transition: all 5s ease-in-out;
+    }
+    
+    .popup h2 {
+      margin-top: 0;
+      margin-bottom: 30px;
+      color: #333;
+      font-size: larger;
+      font-weight: bolder;
+      font-family: Tahoma, Arial, sans-serif;
+
+    }
+    .popup label{
+      font-size: medium;
+      font-family:Arial, Helvetica, sans-serif;
+      font-weight: bold;
+      margin-top: 30px;
+
+      margin-bottom: 18px;
+    }
+    .popup .close {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      transition: all 200ms;
+      font-size: 30px;
+      font-weight: bold;
+      text-decoration: none;
+      color: #333;
+    }
+    .popup .close:hover {
+      color: #06D85F;
+    }
+    .popup button{
+      background-color: #1d3557;
+      border-radius: 7px;
+      outline: none;
+      color: white;
+      font-size: medium;
+      font-weight: bold;
+      cursor: pointer;
+      padding: 6px;
+    }
+    .popup .content {
+      max-height: 30%;
+      overflow: auto;
+      margin-bottom: 28px;
+      margin-top: 5px;
+    }
+    .popup .content1 {
+      max-height: 30%;
+      width: 35%;
+      overflow: auto;
+      margin-bottom: 28px;
+      margin-top: 5px;
+      border: 2px solid #1d3557;
+      border-radius: 15px;
+    }
+    input::file-selector-button {
+      background-color: #1d3557;
+      border-radius: 7px;
+      outline: none;
+      color: white;
+      font-size: medium;
+      font-weight: bold;
+      cursor: pointer;
+      padding: 6px;
+
+    }
+    .custom-file-upload {
+        border: 1px solid #ccc;
+        display: inline-block;
+        padding: 6px 12px;
+        cursor: pointer;
+    }
+    
+  </style>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  
+</head>
+
+<body class="antialiased bg-white font-sans text-gray-900">
+
+  <main class="w-full">
+
+    <!-- start header -->
+    <header class="absolute top-0 left-0 w-full z-50 px-4 sm:px-8 lg:px-16 xl:px-40 2xl:px-64">
+      
+
+      <div class="flex flex-wrap items-center justify-between py-6">
+        <div class="w-1/2 md:w-auto">
+          <a href="#" class="text-white font-bold text-2xl">
+            Paecify
+          </a>
+        </div>
+
+        <label for="menu-toggle" class="pointer-cursor md:hidden block"><svg class="fill-current text-white"
+            xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
+            <title>menu</title>
+            <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"></path>
+          </svg></label>
+
+        <input class="hidden" type="checkbox" id="menu-toggle">
+
+        <div class="hidden md:block w-full md:w-auto" id="menu">
+          <nav
+            class="w-full bg-white md:bg-transparent rounded shadow-lg px-6 py-4 mt-4 text-center md:p-0 md:mt-0 md:shadow-none">
+            <ul class="md:flex items-center">
+              <li><a class="py-2 inline-block md:text-white md:hidden lg:block font-semibold" 
+                  href="#about_us">About Us</a></li>
+              <li class="md:ml-4"><a class="py-2 inline-block md:text-white md:px-2 font-semibold"
+                  href="#about">About Product</a></li>
+              <li class="md:ml-4"><a class="py-2 inline-block md:text-white md:px-2 font-semibold"
+                  href="">GitHub Links</a></li>
+              
+              <li class="md:ml-6 mt-3 md:mt-0">
+                <a class="inline-block font-semibold px-4 py-2 text-white bg-blue-600 md:bg-transparent md:text-white border border-white rounded"
+                  href="#contact">Contact Us</a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+
+      </div>
+    </header>
+    <!-- end header -->
+
+    <!-- start hero -->
+    <div class="bg-gray-100">
+      <section class="cover bg-blue-teal-gradient relative bg-blue-600 px-4 sm:px-8 lg:px-16 xl:px-40 2xl:px-64 overflow-hidden py-48 flex
+      items-center min-h-screen">
+        <div class="h-full absolute top-0 left-0 z-0">
+          <img src="../static/images/bg.jpg" alt="" style="width: 100%;" class="w-full h-full object-cover">
+        </div>
+
+        <div class="lg:w-3/4 xl:w-2/4 relative z-10 h-100 lg:mt-16">
+          <div>
+            <h1 class="text-teal-500 text-4xl md:text-5xl xl:text-6xl font-bold leading-tight">Unveil the Power of Lip Reading</h1>
+            <p class="text-teal-1000 text-xl md:text-2xl leading-snug mt-4">Step into the Realm of Silent Conversations Introducing Your Gateway to the Lip Reading World.</p>
+            <a href="#popup" class="px-8 py-4 bg-teal-500 text-white rounded inline-block mt-8 font-semibold">
+              Try Now
+            </a>
+          </div>
+        </div>
+      </section>
+    </div>
+    <div id="popup" class="overlay">
+      <div class="popup">
+        <h2>PAECIFY INFORMATION</h2>
+        <a class="close" href="#">&times;</a>
+
+        <label>About:</label>
+        <div class="content">
+          This application can be used to find the words from the video without audio.
+        </div>
+        <label>Upload Video:</label>
+        <form action="/predict" method="post" enctype="multipart/form-data">
+          <div class="content1">
+            
+            <input class="custom-file-upload" type="file" accept=".mpg" placeholder="Select Files" name="demo1" />
+          </div>
+          <!-- <input type="file" accept="video/*" id="video" name="video" /> -->
+          <button type="submit" >Submit</button>
+        </form>
+        <div id="prediction"></div>
+          
+      </div>
+    </div>
+    <!-- end hero -->
+
+    <!-- start about -->
+    <section id="#about" class="relative px-4 py-16 sm:px-8 lg:px-16 xl:px-40 2xl:px-64 lg:py-32">
+      <div class="flex flex-col lg:flex-row lg:-mx-8">
+        <div class="w-full lg:w-1/2 lg:px-8">
+          <h2 class="text-3xl leading-tight font-bold mt-4">Welcome to the world of lip reading</h2>
+          <p class="text-lg mt-4 font-semibold">Excellence in lip reading technologies</p>
+          <p class="mt-2 leading-relaxed">Lip reading technology is advancing rapidly. With the ability to decipher spoken words from lip movements, 
+            communication becomes more inclusive. Our application utilizes cutting-edge convolutional neural networks to facilitate accurate lip 
+            reading. Whether in noisy environments or for individuals with hearing impairments, our technology excels. Effortlessly transforming 
+            visual cues into comprehensible text, our application opens doors to seamless interaction.</p>
+        </div>
+
+        <div class="w-full lg:w-1/2 lg:px-8 mt-12 lg:mt-0">
+          <div class="md:flex">
+            <div>
+              <div class="w-16 h-16 bg-teal-600 rounded-full">
+                <img src="../static/images/mouth.png" class="w-16 h-16 rounded-full"/>
+              </div>
+            </div>
+            <div class="md:ml-8 mt-4 md:mt-0">
+              <h4 class="text-xl font-bold leading-tight">Revolutionizing Communication through Lip Reading</h4>
+              <p class="mt-2 leading-relaxed">Our all-inclusive solutions enable you to access complete lip reading support within our cutting-edge platform – from basic lip movements comprehension to intricate dialogue nuances.</p>
+            </div>
+          </div>
+
+          <div class="md:flex mt-8">
+            <div>
+              <div class="w-16 h-16 bg-blue-600 rounded-full">
+                <img src="../static/images/icons8-reading-64.png" class="w-16 h-16 rounded-full"/>
+              </div>
+            </div>
+            <div class="md:ml-8 mt-4 md:mt-0">
+              <h4 class="text-xl font-bold leading-tight">Lip Reading, Centered Around You</h4>
+              <p class="mt-2 leading-relaxed">Tailored Lip Reading Plans to Suit You
+                Whether you're new to lip reading or picking up where you left off, our personalized approach caters to your pace, preferences, and aspirations. Our welcoming environment, empathetic professionals, and non-intrusive techniques ensure a reassuring lip reading journey.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="md:flex md:flex-wrap mt-24 text-center md:-mx-4">
+        <div class="md:w-1/2 md:px-4 lg:w-1/4">
+          <div class="bg-white rounded-lg border border-gray-300 p-8">
+            <img src="../static/images/icons8-upload-to-cloud-100.png" alt="" class="h-20 mx-auto">
+
+            <h4 class="text-xl font-bold mt-4">Upload from Device</h4>
+            <p class="mt-1">Upload any format video like mp3, mpeg etc...</p>
+            <a href="#" class="block mt-4"></a>
+          </div>
+        </div>
+
+        <div class="md:w-1/2 md:px-4 mt-4 md:mt-0 lg:w-1/4">
+          <div class="bg-white rounded-lg border border-gray-300 p-8">
+            <img src="../static/images/icons8-google-drive-100.png" alt="" class="h-20 mx-auto">
+
+            <h4 class="text-xl font-bold mt-4">Upload From Drive</h4>
+            <p class="mt-1">Upload any format video like mp3, mpeg etc...</p>
+            <a href="#" class="block mt-4"></a>
+          </div>
+        </div>
+
+        <div class="md:w-1/2 md:px-4 mt-4 md:mt-8 lg:mt-0 lg:w-1/4">
+          <div class="bg-white rounded-lg border border-gray-300 p-8">
+            <img src="../static/images/icons8-youtube-100.png" alt="" class="h-20 mx-auto">
+
+            <h4 class="text-xl font-bold mt-4">Upload youtube video</h4>
+            <p class="mt-1">Upload any format video like mp3, mpeg etc...</p>
+            <a href="#" class="block mt-4"></a>
+          </div>
+        </div>
+
+        <div class="md:w-1/2 md:px-4 mt-4 md:mt-8 lg:mt-0 lg:w-1/4">
+          <div class="bg-white rounded-lg border border-gray-300 p-8">
+            <img src="../static/images/icons8-cloud-camera-64.png" alt="" class="h-20 mx-auto">
+            
+            <h4 class="text-xl font-bold mt-4">Record Live Video</h4>
+            <p class="mt-1">Upload any format video like mp3, mpeg etc...</p>
+            <a href="#" class="block mt-4"></a>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- end about -->
+
+    <!-- start testimonials -->
+    <section id="#about" class="relative bg-gray-100 px-4 sm:px-8 lg:px-16 xl:px-40 2xl:px-64 py-16 lg:py-32">
+      <div class="flex flex-col lg:flex-row lg:-mx-8">
+        <div class="w-full lg:w-1/2 lg:px-8">
+          <h2 class="text-3xl leading-tight font-bold mt-4">Why Opt for Our Lip Reading Solution?</h2>
+          <p class="mt-2 leading-relaxed">Transcribing Visual Clues: Unveiling Silent Messages
+              Visual signals are powerful communicators. Our advanced lip reading project deciphers these cues, unlocking unspoken words.
+              Just as text unveils audio messages, our technology reveals the language of lips. With precision and accuracy, we bridge the 
+              gap for a more inclusive conversation.</p>
+        </div>
+
+        <div class="w-full md:max-w-md md:mx-auto lg:w-1/2 lg:px-8 mt-12 mt:md-0">
+          <div class="bg-gray-400 w-full h-72 rounded-lg">
+            <img src="../static/images/speaking.jpg" alt=""/>
+          </div>
+
+          <p class="italic text-sm mt-2 text-center">Pioneering silent dialogue understanding, transcending spoken words through visual eloquence with technology.</p>
+        </div>
+      </div>
+    </section>
+    <!-- end testimonials -->
+
+    <!-- start blog -->
+    <section class="relative bg-white px-4 sm:px-8 lg:px-16 xl:px-40 2xl:px-64 py-32">
+      <div class="">
+        <h2 class="text-3xl leading-tight font-bold">Developers</h2>
+        <p class="text-gray-600 mt-2 md:max-w-lg">Crafted by visionary developers, our team brought dreams to code, molding innovation. Countless lines converged, weaving expertise into pixel-perfect solutions. Challenges sparked creativity, birthing a user-centered masterpiece. Experience the dedication woven into every click.</p>
+
+        <a href="#" title="" class="inline-block text-teal-500 font-semibold mt-6 mt:md-0"></a>
+      </div>
+
+      <div class="md:flex mt-12 md:-mx-4">
+        <div class="md:px-4 md:w-1/2 xl:w-1/4">
+          <div class="bg-white rounded border border-gray-300">
+            <div class="w-full h-48 overflow-hidden bg-gray-300">
+              <img src="../static/images/Akil.jpg" alt=""/>
+            </div>
+            <div class="p-4">
+              <div class="flex items-center text-sm">
+                <span class="text-teal-500 font-semibold">Student</span>
+                <span class="ml-4 text-gray-600">AI & DS</span>
+              </div>
+              <p class="text-lg font-semibold leading-tight mt-4">Sona College Of Technology</p>
+              <p class="text-gray-600 mt-1">Data Engineer
+              </p>
+              <div class="flex items-center mt-4">
+                <div class="w-8 h-8 rounded-full overflow-hidden bg-gray-300"></div>
+                <div class="ml-4">
+                  <p class="text-gray-600">By <span class="text-gray-900 font-semibold">AKIL SADIK M H</span></p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="md:px-4 md:w-1/2 xl:w-1/4 mt-4 md:mt-0">
+          <div class="bg-white rounded border border-gray-300 ">
+            <div class="w-full h-48 overflow-hidden bg-gray-300">
+              <img src="../static/images/HARIKRISHNA R.png" alt=""/>
+            </div>
+            <div class="p-4">
+              <div class="flex items-center text-sm">
+                <span class="text-teal-500 font-semibold">Student</span>
+                <span class="ml-4 text-gray-600">IT</span>
+              </div>
+              <p class="text-lg font-semibold leading-tight mt-4">Sona College Of Technology</p>
+              <p class="text-gray-600 mt-1">Machine Learning Engineer
+              </p>
+              <div class="flex items-center mt-4">
+                <div class="w-8 h-8 rounded-full overflow-hidden bg-gray-300"></div>
+                <div class="ml-4">
+                  <p class="text-gray-600">By <span class="text-gray-900 font-semibold">HARIKRISHNA R</span></p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="md:px-4 md:w-1/2 xl:w-1/4 mt-4 md:mt-0">
+          <div class="bg-white rounded border border-gray-300 ">
+            <div class="w-full h-48 overflow-hidden bg-gray-300">
+              <img src="../static/images/abhindra.png" alt=""/>
+            </div>
+            <div class="p-4">
+              <div class="flex items-center text-sm">
+                <span class="text-teal-500 font-semibold">Student</span>
+                <span class="ml-4 text-gray-600">IT</span>
+              </div>
+              <p class="text-lg font-semibold leading-tight mt-4">Sona College Of Technology</p>
+              <p class="text-gray-600 mt-1">Front End Developer
+              </p>
+              <div class="flex items-center mt-4">
+                <div class="w-8 h-8 rounded-full overflow-hidden bg-gray-300"></div>
+                <div class="ml-4">
+                  <p class="text-gray-600">By <span class="text-gray-900 font-semibold">ABHINDRA G</span></p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="md:px-4 md:w-1/2 xl:w-1/4 mt-4 md:mt-0">
+          <div class="bg-white rounded border border-gray-300 ">
+            <div class="w-full h-48 overflow-hidden bg-gray-300">
+              <img src="../static/images/shobhan.jpg" alt=""/>
+            </div>
+            <div class="p-4">
+              <div class="flex items-center text-sm">
+                <span class="text-teal-500 font-semibold">Student</span>
+                <span class="ml-4 text-gray-600">AI & DS</span>
+              </div>
+              <p class="text-lg font-semibold leading-tight mt-4">Sona College Of Technology</p>
+              <p class="text-gray-600 mt-1">Full Stack Developer
+              </p>
+              <div class="flex items-center mt-4">
+                <div class="w-8 h-8 rounded-full overflow-hidden bg-gray-300"></div>
+                <div class="ml-4">
+                  <p class="text-gray-600">By <span class="text-gray-900 font-semibold">SHOBHAN KUMAR R</span></p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- end blog -->
+
+    <!-- start cta -->
+    <section
+      class="relative bg-blue-teal-gradient px-4 sm:px-8 lg:px-16 xl:px-40 2xl:px-64 py-12 text-center md:text-left">
+      <div class="md:flex md:items-center md:justify-center">
+        <h2 class="text-xl font-bold text-white">Contact Us Through: <br class="block md:hidden"> 
+          harikrishna.20it@sonatech.ac.in (or) akilsadik.21ads@sonatech.ac.in 
+        </h2>
+        <a href="#"
+          class="px-8 py-4 bg-white text-blue-600 rounded inline-block font-semibold md:ml-8 mt-4 md:mt-0">Try
+          Now</a>
+      </div>
+    </section>
+    <!-- end cta -->
+
+    <!-- start footer -->
+    
+  </main>
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-131505823-4"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag('js', new Date());
+
+    gtag('config', 'UA-131505823-4');
+  </script>
+  <script>
+    const form = document.querySelector("form");
+    const predictionDiv = document.getElementById("prediction");
+
+    form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const formData = new FormData(form);
+        
+        const response = await fetch("/predict", {
+            method: "POST",
+            body: formData
+        });
+
+        const prediction = await response.text();
+        predictionDiv.textContent = "Prediction: Hello";
+    });
+  </script>
+
+</body>
+
+</html>
