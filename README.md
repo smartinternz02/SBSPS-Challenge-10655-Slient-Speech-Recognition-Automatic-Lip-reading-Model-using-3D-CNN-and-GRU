@@ -1,7 +1,6 @@
-# SBSPS-Challenge-10655-Slient-Speech-Recognition-Automatic-Lip-reading-Model-using-3D-CNN-and-GRU
-Slient Speech Recognition : Automatic Lip reading Model using 3D CNN and GRU
+<h1 align="center">SBSPS-Challenge-10655-Slient-Speech-Recognition-Automatic-Lip-reading-Model-using-3D-CNN-and-GRU </h1>
 
-<h1 align="center">Lip Reading using CNN and GRU</h1>
+Slient Speech Recognition : Automatic Lip reading Model using 3D CNN and GRU
 
 <!-- Badges -->
 <p align="center">
